@@ -18,6 +18,8 @@ import comx.example.zhushi.categorymanager.R;
 public class DragGridAdapter extends BaseAdapter {
     private Context context;
     private List<String> commonCategoryList;
+    private int removePosition = -1;
+    private boolean isVisible = true;
 
     public DragGridAdapter(Context context, List<String> commonCategoryList) {
         this.context = context;
@@ -45,6 +47,34 @@ public class DragGridAdapter extends BaseAdapter {
         TextView categoryName = (TextView) convertView.findViewById(R.id.category_name);
         categoryName.setText(getItem(position));
 
+        if (removePosition == position) {
+            categoryName.setVisibility(View.INVISIBLE);
+        }
+
+        if (!isVisible && (position == commonCategoryList.size() - 1)) {
+            categoryName.setVisibility(View.INVISIBLE);
+        }
+
         return convertView;
+    }
+
+    public void setRemove(int position) {
+        removePosition = position;
+        notifyDataSetChanged();
+    }
+
+    public void remove() {
+        commonCategoryList.remove(removePosition);
+        removePosition = -1;
+        notifyDataSetChanged();
+    }
+
+    public void addItem(String item) {
+        commonCategoryList.add(item);
+        notifyDataSetChanged();
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
     }
 }

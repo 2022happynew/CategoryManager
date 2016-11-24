@@ -18,6 +18,8 @@ import comx.example.zhushi.categorymanager.R;
 public class OtherGridAdapter extends BaseAdapter {
     private Context context;
     private List<String> otherCategoryList;
+    private boolean isVisible = true;
+    private int removePosition = -1;
 
     public OtherGridAdapter(Context context, List<String> otherCategoryList) {
         this.context = context;
@@ -45,6 +47,34 @@ public class OtherGridAdapter extends BaseAdapter {
         TextView categoryName = (TextView) convertView.findViewById(R.id.category_name);
         categoryName.setText(getItem(position));
 
+        if (!isVisible && position == 0) {
+            categoryName.setVisibility(View.INVISIBLE);
+        }
+
+        if (removePosition == position) {
+            categoryName.setVisibility(View.INVISIBLE);
+        }
+
         return convertView;
+    }
+
+    public void addItem(String item) {
+        otherCategoryList.add(0, item);
+        notifyDataSetChanged();
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+
+    public void setRemove(int position) {
+        removePosition = position;
+        notifyDataSetChanged();
+    }
+
+    public void remove() {
+        otherCategoryList.remove(removePosition);
+        removePosition = -1;
+        notifyDataSetChanged();
     }
 }
